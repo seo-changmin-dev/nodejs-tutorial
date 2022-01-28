@@ -1,34 +1,21 @@
-GET http://localhost:3030/api/members/
-
-###
-GET http://localhost:3030/api/members?team=Servers
-
-
-###
-Get http://localhost:3030/api/members/11
-
-###
-POST http://localhost:3030/api/members
+POST http://localhost:3030/api/members/
 Content-Type: application/json
 
 {
-  "name": "Queen",
-  "team": "Networks",
-  "position": "Astra",
-  "emailAddress": "Queen@Astra.com",
-  "phoneNumber": "010-xxxx-xxxx",
-  "admissionDate": "2021/06/12",
-  "birthday": "1995/09/27",
-  "profileImage": "profile11.png"
+  "name": "July",
+  "team": "Secure",
+  "birthday": "2004/07/04",
+  "admissionDate": "2012/07/19"
 }
 
 ###
-PUT http://localhost:3030/api/members/12
+PUT http://localhost:3030/api/members/7
 Content-Type: application/json
 
 {
-  "name": "Bixby"
+  "name": "July",
+  "admissionDate": "2012/07/19"
 }
 
 ###
-DELETE  http://localhost:3030/api/members/15
+DELETE http://localhost:3030/api/members/8

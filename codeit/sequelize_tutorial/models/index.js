@@ -1,15 +1,13 @@
 const Sequelize = require('sequelize');
-const config = require('../config/config.json');
+const config = require('../config/config.json')['development'];
 
-const {
-  username, password, database, host, dialect,
-} = config.development;
+const { username, password, database, host, dialect } = config;
+
 const sequelize = new Sequelize(database, username, password, {
-  host,
-  dialect,
+  host, dialect,
 });
 
-const Member = require('./member.js')(sequelize, Sequelize.DataTypes);
+const Member = require('./member')(sequelize, Sequelize.DataTypes);
 
 const db = {};
 db.Member = Member;

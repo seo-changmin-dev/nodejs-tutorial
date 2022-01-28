@@ -14,33 +14,21 @@ module.exports = {
       team: {
         type: Sequelize.STRING
       },
-      position: {
-        type: Sequelize.STRING
-      },
-      emailAddress: {
-        type: Sequelize.STRING
-      },
-      phoneNumber: {
-        type: Sequelize.STRING
+      birthday: {
+        type: Sequelize.DATE
       },
       admissionDate: {
         type: Sequelize.DATE
       },
-      birthday: {
-        type: Sequelize.DATE
-      },
-      profileImage: {
-        type: Sequelize.STRING
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('now'),
+        defaultValue: Sequelize.fn('now')
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('now'),
+        defaultValue: Sequelize.fn('now')
       }
     });
   },
