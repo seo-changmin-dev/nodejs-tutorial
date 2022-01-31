@@ -1,4 +1,4 @@
-POST http://localhost:3030/api/members/
+POST https://cowork-api-spmiw.run.goorm.io/api/members
 Content-Type: application/json
 
 {
@@ -9,12 +9,12 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3030/api/members/7
+PUT https://cowork-api-spmiw.run.goorm.io/api/members/7
 Content-Type: application/json
 
 {
-  "name": "July",
-  "admissionDate": "2012/07/19"
+  "name": "June",
+  "admissionDate": "2012/05/19"
 }
 
 ###

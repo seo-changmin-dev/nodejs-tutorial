@@ -51,6 +51,6 @@ app.delete('/api/members/:id', async (req, res) => {
   res.send(`Member with ${id} being deleted on DB`);
 });
 
-app.listen(3030, () => {
+app.listen(process.env.PORT || 3030, () => {
   console.log("Server is Listening...");
 });
