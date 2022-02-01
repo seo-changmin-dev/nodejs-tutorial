@@ -1,55 +1,68 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-// Additional Package
-var session = require('express-session');
-var flash = require('connect-flash');
+const express = require('express');
+const path = require('path');
+const morgan = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
-var app = express();
+const app = express();
+app.set('port', process.env.PORT || 3000);
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.use(morgan('dev'));
+app.use('/', express.static(path.join(__dirname, 'views'))); // 요청 주소가 '/' 이여도, 이제는 '/views/'로 해석된다.
+app.use(express.json()); // application/json을 파싱해서 req.body 객체로 만든다
 
-app.use(logger('dev'));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
+// application/x-www-form-urlencoded를 파싱해서 req.body 객체로 만든다.
+// key=value 쌍이 '&' 로 구분되는, form을 위한 문자열들
+// extended false면 노드의 queryString 모듈로 쿼리스트링 파싱
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser('secret code'));
-app.use(session({
-  resave: false,
-  saveUninitialized: false,
-  secret: 'secret code',
-  cookie: {
-    httpOnly: true,
-    secure: false,
-  },
-}));
-app.use(flash());
 
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+// app.use, app.get, app.post, app.put, app.delete 모두 미들웨어를 사용하는 메서드였다...
+app.use((req, res, next) => {
+  console.log('모든 요청에 다 실행됩니다.');
+  next();
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+const fs = require('fs');
+const multer = require('multer');
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, 'uploads/')
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname);
+      done(null, path.basename(file.originalname, ext) + Date.now() + ext);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-module.exports = app;
+try {
+  fs.readdirSync('uploads');
+} catch (error) {
+  console.error('uploads 폴더가 없어 새로 생성합니다.');
+  fs.mkdirSync('uploads');
+}
+
+app.post('/upload', upload.single('image'), (req, res) => {
+  console.log(req.file, req.body);
+  res.send('ok');
+});
+
+app.get('/', (req, res, next) => {
+  console.log('GET / 요청에서만 실행됩니다.')
+  res.sendFile(path.join(__dirname, 'views/multipart.html'));
+});
+// , (req, res) => {
+//   throw new Error('에러는 에러처리 미들웨어로 갑니다.');
+// });
+
+// parameter가 4개인 경우 에러처리 미들웨어로 간주된다.
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send(err.message);
+});
+
+app.listen(app.get('port'), () => {
+  console.log(app.get('port'),'번 포트에서 대기중');
+});
