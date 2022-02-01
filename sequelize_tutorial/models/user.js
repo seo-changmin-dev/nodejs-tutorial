@@ -13,10 +13,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     lastName: {
       type: DataTypes.STRING,
+    },
+    clock: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     }
   }, {
-    sequelize,
+    sequelize, // sequelize object noticed its related Models.
     modelName: 'User',
+
+    timestamps: true,
+    createdAt: false,
+    updatedAt: 'newUpdatedAt',
   });
 
   return User;
